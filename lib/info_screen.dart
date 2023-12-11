@@ -1,17 +1,17 @@
 // lib/info_screen.dart
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'golfer.dart';
+import 'models/golfer.dart';
 
 class InfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final golferBox = Hive.box<String>('golfers');
+    final golferBox = Hive.box<Golfer>('golfers');
 
     return Scaffold(
       appBar: AppBar(title: Text('PGA Tour Top 10 Golfers')),
       body: FutureBuilder(
-        future: golferBox.openBox(),
+        future: Hive.openBox<Golfer>('golfers'),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             final golfers = [
@@ -27,6 +27,14 @@ class InfoScreen extends StatelessWidget {
               Golfer('Wyndham Clark', 222),
             ];
 
+            for (var i = 0; i < golfers.length; i++) {
+              var golfer = golfers[i];
+              var savedGolfer = golferBox.get(golfer.name);
+              if (savedGolfer != null && savedGolfer is Golfer) {
+                golfers[i].isFavorite = savedGolfer.isFavorite;
+              }
+            }
+
             return ListView.builder(
               itemCount: golfers.length,
               itemBuilder: (context, index) {
@@ -34,8 +42,22 @@ class InfoScreen extends StatelessWidget {
                 return ListTile(
                   title: Text(golfer.name),
                   subtitle: Text('Points: ${golfer.points}'),
+                  trailing: IconButton(
+                    icon: golfer.isFavorite
+                        ? Icon(Icons.favorite)
+                        : Icon(Icons.favorite_border),
+                    onPressed: () {
+                      golfer.isFavorite = !golfer.isFavorite;
+                      golferBox.put(golfer.name, golfer);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              '${golfer.name} ${golfer.isFavorite ? 'added to' : 'removed from'} favorites'),
+                        ),
+                      );
+                    },
+                  ),
                   onTap: () {
-                    // Show points when golfer name is clicked
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Points: ${golfer.points}')),
                     );
