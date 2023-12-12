@@ -1,7 +1,7 @@
 // lib/info_screen.dart
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'models/golfer.dart';
+import 'package:pga_tour/models/golfer.dart';
 
 class InfoScreen extends StatelessWidget {
   @override
