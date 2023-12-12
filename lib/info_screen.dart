@@ -1,7 +1,7 @@
-// lib/info_screen.dart
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:pga_tour/models/golfer.dart';
+import 'favorited_golfers_screen.dart'; // Import the screen to display favorited golfers
 
 class InfoScreen extends StatelessWidget {
   @override
@@ -70,6 +70,16 @@ class InfoScreen extends StatelessWidget {
           }
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FavoritedGolfersScreen()),
+          );
+        },
+        child: Icon(Icons.star),
+      ),
     );
   }
 }
+
