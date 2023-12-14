@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:pga_tour/models/golfer.dart';
-import 'favorited_golfers_screen.dart'; // Import the screen to display favorited golfers
+import 'favorited_golfers_screen.dart';
 
 class InfoScreen extends StatefulWidget {
   @override
@@ -29,6 +29,17 @@ class _InfoScreenState extends State<InfoScreen> {
       body: golferBox == null
           ? Center(child: CircularProgressIndicator())
           : buildGolfersList(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FavoritedGolfersScreen(), // Navigate to FavoritedGolfersScreen
+            ),
+          );
+        },
+        child: Icon(Icons.favorite),
+      ),
     );
   }
 
@@ -44,6 +55,7 @@ class _InfoScreenState extends State<InfoScreen> {
       Golfer('Ryan Fitzpatrick', 246),
       Golfer('Brian Harman', 229),
       Golfer('Wyndham Clark', 222),
+      Golfer('Tiger Woods', 600),
     ];
 
     for (var i = 0; i < golfers.length; i++) {
@@ -90,5 +102,3 @@ class _InfoScreenState extends State<InfoScreen> {
     );
   }
 }
-
-
