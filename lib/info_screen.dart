@@ -34,7 +34,7 @@ class _InfoScreenState extends State<InfoScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => FavoritedGolfersScreen(), // Navigate to FavoritedGolfersScreen
+              builder: (context) => FavoritedGolfersScreen(),
             ),
           );
         },
@@ -55,7 +55,6 @@ class _InfoScreenState extends State<InfoScreen> {
       Golfer('Ryan Fitzpatrick', 246),
       Golfer('Brian Harman', 229),
       Golfer('Wyndham Clark', 222),
-      Golfer('Tiger Woods', 600),
     ];
 
     for (var i = 0; i < golfers.length; i++) {
@@ -70,33 +69,49 @@ class _InfoScreenState extends State<InfoScreen> {
       itemCount: golfers.length,
       itemBuilder: (context, index) {
         final golfer = golfers[index];
-        return ListTile(
-          title: Text(golfer.name),
-          subtitle: Text('Points: ${golfer.points}'),
-          trailing: IconButton(
-            icon: Icon(
-              golfer.isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: golfer.isFavorite ? Colors.red : null, // Set the color conditionally
-            ),
-            onPressed: () {
-              setState(() {
-                golfer.isFavorite = !golfer.isFavorite;
-                golferBox.put(golfer.name, golfer);
+        return Expanded(
+          child: Card(
+            margin: EdgeInsets.all(8.0),
+            child: ListTile(
+              title: Text(
+                golfer.name,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              subtitle: Text(
+                'Points: ${golfer.points}',
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+              trailing: IconButton(
+                icon: Icon(
+                  golfer.isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: golfer.isFavorite ? Colors.red : null,
+                ),
+                onPressed: () {
+                  setState(() {
+                    golfer.isFavorite = !golfer.isFavorite;
+                    golferBox.put(golfer.name, golfer);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          '${golfer.name} ${golfer.isFavorite ? 'added to' : 'removed from'} favorites',
+                        ),
+                      ),
+                    );
+                  });
+                },
+              ),
+              onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      '${golfer.name} ${golfer.isFavorite ? 'added to' : 'removed from'} favorites',
-                    ),
-                  ),
+                  SnackBar(content: Text('Points: ${golfer.points}')),
                 );
-              });
-            },
+              },
+            ),
           ),
-          onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Points: ${golfer.points}')),
-            );
-          },
         );
       },
     );
